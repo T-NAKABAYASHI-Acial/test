@@ -12,4 +12,10 @@ https://qiita.com/nokonoko_1203/items/242367a83c313a5e46bf
 
 ## 構築手順
 docker-compose build --no-cache  
-docker-compose up --buil -d
+docker-compose up --build -d
+
+この手順で127.0.0.1にてdjangoのスタート画面が表示されます。
+以降は各プロジェクト、アプリケーションの作成を行ってください。
+プロジェクト作成: django-admin startproject [project名]
+アプリケーション作成: python manage.py startapp [app名]
+

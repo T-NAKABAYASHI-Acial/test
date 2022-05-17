@@ -1,30 +1,26 @@
 version: '3'
 
 services:
-  postgres:
+  db:
     image: postgres:latest
     networks:
       - django_net
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: django_db
     volumes:
-            - ./postgres_data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
 
   django:
     build: .
-    command: python manage.py runserver 0.0.0.0
+    command: python manage.py runserver 0.0.0.0:80
     networks:
       - django_net
     volumes:
       - .:/code
     ports:
       - "80:80"
-    environment:
-        - SECRET_KEY=hoge
-        - DATABASE_ENGINE=django.db.backends.postgresql
-        - DATABASE_DB=django_db
-        - DATABASE_USER=django_db_user
-        - DATABASE_PASSWORD=password1234
-        - DATABASE_HOST=postgres
-        - DATABASE_PORT=5432
     depends_on:
       - db
 
