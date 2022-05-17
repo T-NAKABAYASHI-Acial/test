@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    networks:
+      - django_net
+    volumes:
+            - ./postgres_data:/var/lib/postgresql/data
+
+  django:
+    build: .
+    command: python manage.py runserver 0.0.0.0
+    networks:
+      - django_net
+    volumes:
+      - .:/code
+    ports:
+      - "80:80"
+    environment:
+        - SECRET_KEY=hoge
+        - DATABASE_ENGINE=django.db.backends.postgresql
+        - DATABASE_DB=django_db
+        - DATABASE_USER=django_db_user
+        - DATABASE_PASSWORD=password1234
+        - DATABASE_HOST=postgres
+        - DATABASE_PORT=5432
+    depends_on:
+      - db
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    networks:
+      - django_net
+    ports:
+      - "8888:80"
+    environment:
+      TZ: Asia/Tokyo
+      PGADMIN_DEFAULT_EMAIL: 'aaa@bbb.ccc'
+      PGADMIN_DEFAULT_PASSWORD: 'password'
+
+networks:
+    default:
+        external:
+            name: bridge
+    django_net:
+        driver: bridge
